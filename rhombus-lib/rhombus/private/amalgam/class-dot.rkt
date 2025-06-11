@@ -632,11 +632,13 @@
     [(hash-ref (objects-desc-method-map desc) (syntax-e field-id) #f)
      => (lambda (pos)
           (define shape (vector-ref (objects-desc-method-shapes desc) pos))
+          ;; (printf "shape ~a~n" shape)
           (define shape-ex (if (vector? shape) (vector-ref shape 0) shape))
           (define protected? (protect? shape-ex))
           (define shape-symbol (if (protect? shape-ex) (protect-v shape-ex) shape-ex))
           (define shape-arity (and (vector? shape) (vector-ref shape 1)))
           (define non-final? (or (box? shape-symbol) (and (pair? shape-symbol) (box? (car shape-symbol)))))
+          ;; (printf "non-final? ~a~n" non-final?)
           (cond
             [(and protected?
                   (not (allow-protected?)))

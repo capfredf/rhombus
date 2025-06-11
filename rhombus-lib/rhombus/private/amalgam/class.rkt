@@ -65,6 +65,7 @@
      #:with tail-name #'full-name.tail-name
      #:with orig-stx stxes
      #:with reflect-name (class-reflect-name #'options.name name-prefix #'name)
+     (printf "class name is ~a ~n" #'name)
      (define body #'(options.form ...))
      (define intro (make-syntax-introducer #t))
      ;; The shape of `finish-data` is recognized in `class-annotation+finish`
@@ -110,6 +111,7 @@
           exports
           [option stx-params] ...)
        #:with scope-stx ((make-syntax-delta-introducer #'forward-ctx #'forward-base-ctx) #'init-scope-stx)
+       (printf "class ~a annot finish ~n" #'name)
        (define options (parse-annotation-options #'orig-stx #'(option ...) #'(stx-params ...)))
        (define parent-name (hash-ref options 'extends #f))
        (define super (and parent-name
@@ -293,11 +295,13 @@
        (define stxes #'orig-stx)
        (define options (parse-options #'orig-stx #'(option ...) #'(stx-params ...)))
        (define parent-name (hash-ref options 'extends #f))
+       (printf "class ~a parent ~a finish ~n" #'name parent-name)
        (define super (and parent-name
                           (syntax-local-value* (in-class-desc-space parent-name) class-desc-ref)))
        (define interface-names (reverse (hash-ref options 'implements '())))
        (define-values (all-interfaces interfaces) (interface-names->interfaces stxes interface-names
                                                                                #:results values))
+       (printf "class ~a finish interfaces ~a  !! ~a ~n" #'name all-interfaces interfaces)
        (define-values (private-interfaces protected-interfaces)
          (extract-private-protected-interfaces #'orig-stx options))
        (define authentic? (hash-ref options 'authentic? #f))
@@ -932,6 +936,7 @@
                          (interface-names->interfaces
                           #f
                           (let ([l (objects-desc-interface-ids super)])
+                            (printf "objects-desc-interface-ids ~a ~n" l)
                             (if (null? l)
                                 null
                                 (syntax->list l))))
@@ -939,6 +944,7 @@
                      interfaces))
          private-interfaces
          protected-interfaces))
+      (printf "in build-class-struct class ~a : ~a ~a super ~a ~n" #'name all-interfaces abstract-name super)
       (define all-prim-prop-interfaces
         ;; for primitive properties, we only need to cover immediately
         ;; implemented interfaces; values can be inherited from superclasses

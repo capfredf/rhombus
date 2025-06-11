@@ -33,8 +33,11 @@
                                          (lambda (v) bounce-to-printer-interface)))))
 
 (define (bounce-to-printer-interface v mode recur)
+  ;; (displayln "42")
+  ;; (printf "methods ~a" (Printable-ref v))
   (define pd ((vector-ref (Printable-ref v) 0) v mode recur))
-  ;; guarded by method result
+  ;; (displayln "after")
+ ;; guarded by method result
   (print-description-unwrap #f pd))
 
 (define-class-desc-syntax Printable

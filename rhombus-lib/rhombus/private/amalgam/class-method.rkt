@@ -382,6 +382,7 @@
        => (lambda (id) (if (pair? id) (car id) id))]
       [else
        (define pos (mindex-index (hash-ref method-mindex name)))
+       (printf "method-vtable ~a name ~a ~n" method-vtable name)
        (define n (vector-ref method-vtable pos))
        (if (keyword? n)
            #`(quote #,n)
