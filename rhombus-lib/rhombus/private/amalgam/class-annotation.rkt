@@ -37,6 +37,7 @@
                            make-converted-id indirect-static-infos-stx
                            dot-providers-stx)
       (define len (length (syntax->list name-fields)))
+      (printf "build-class-annotation-form: super-name-fields ~a ~n" super-name-fields)
       (with-syntax ([(constructor-name-field ...) name-fields]
                     [(field-keyword ...) keywords]
                     [(super-name-field ...) (if no-super? '() super-name-fields)]
@@ -79,7 +80,7 @@
                     #'not-supported-due-to-internal-reasons)
               (quote-syntax #,(if name-build-convert
                                   #'(super-name-field ...
-                                     constructor-name-field ...)
+                                                      constructor-name-field ...)
                                   #'()))
               #:extends name-extends))
          (if name-build-convert
